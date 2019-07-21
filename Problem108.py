@@ -22,3 +22,33 @@
 #
 # よって, 解の個数は n の約数の個数と一致する.
 # 1000個以上の解を持つ最小の n は約数の個数が 1000 を超える最小の n である.
+
+from queue import PriorityQueue
+
+
+def gen_prime():
+    def is_prime(n):
+        if n <= 1:
+            return False
+        elif n <= 3:
+            return True
+        elif n % 2 == 0:
+            return False
+        else:
+            return all([n % i != 0 for i in range(3, int(n**0.5) + 1, 2)])
+
+    i = 3
+    yield 2
+
+    while True:
+        if is_prime(i):
+            yield i
+        i += 2
+
+
+def main():
+    pq = PriorityQueue()
+
+
+if __name__ == "__main__":
+    print(main())
