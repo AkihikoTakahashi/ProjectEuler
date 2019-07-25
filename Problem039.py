@@ -7,11 +7,11 @@ def gen_pythagoras(x):
     def gcd(a, b):
         while b != 0:
             a, b = b, a % b
-        return b
+        return a
 
     for m in range(1, int((x // 2)**0.5) + 1):
         for n in range(1, m):
-            if gcd(m, n) != 0:
+            if gcd(m, n) != 1 or m % 2 == n % 2:
                 continue
 
             a = m**2 - n**2
