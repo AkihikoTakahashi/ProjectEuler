@@ -14,8 +14,7 @@
 # xy - xn - yn + n^2 = n^2
 # (x - n)(y - n) = n^2
 # よって x - n, y - n は n^2 の約数.
-# ゆえに, 方程式の解が 1000 個以上 <==> n の約数が 1000 個以上 <==>
-# n^2 の約数が 2000 個以上
+# ゆえに, 方程式の解が 1000 個以上 <==> n^2 の約数が 2000 個以上 が成り立つ.
 # 平方数の約数の個数は奇数なので n^2 の約数が 2001 個以上となる
 # 最小の n を見つければよい.
 #
@@ -26,28 +25,22 @@
 from queue import PriorityQueue
 
 
-def gen_prime():
-    def is_prime(n):
-        if n <= 1:
-            return False
-        elif n <= 3:
-            return True
-        elif n % 2 == 0:
-            return False
-        else:
-            return all([n % i != 0 for i in range(3, int(n**0.5) + 1, 2)])
-
-    i = 3
-    yield 2
-
-    while True:
-        if is_prime(i):
-            yield i
-        i += 2
+# Π(e[i]+1) >= d となる e を返す
+def next_e(e, cnt_d):
+    e[0] //= 4
+    e[1] += 2
 
 
 def main():
-    pq = PriorityQueue()
+    from functools import reduce
+
+    def count_divisor(es):
+        return reduce(lambda x, y: x * y, [x + 1 for x in es])
+
+    def val(es, primes):
+        return reduce(lambda x, y: x * y, [p**e for p, e in zip(primes, es)])
+
+    e2 = [2, 2, 2, 2, 2, 2, 2]
 
 
 if __name__ == "__main__":
