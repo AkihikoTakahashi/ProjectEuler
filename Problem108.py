@@ -22,25 +22,33 @@
 # Π(1+2e) である. よって, 1+2e >= 3 となり, 3^7 = 2187 > 2000 から必要な
 # 素数は 7 個 (2, 3, 5, 7, 11, 13, 17) である.
 
-from queue import PriorityQueue
 
+def count_divisor(n, primes):
+    from functools import reduce
 
-# Π(e[i]+1) >= d となる e を返す
-def next_e(e, cnt_d):
-    e[0] //= 4
-    e[1] += 2
+    cnt = 0
+    es = [0] * len(primes)
+
+    # n をすべての素数で割り尽くし, 残りが 1 でなければそれ以外の素数を含む.
+    for i in range(len(primes)):
+        p = primes[i]
+        while n % p == 0:
+            n //= p
+            es[i] += 1
+
+    if n == 1:
+        return reduce(lambda x, y: x * y, [e + 1 for e in es])
+    else:
+        return 0
 
 
 def main():
-    from functools import reduce
+    primes = [2, 3, 5, 7, 11, 13, 17]
 
-    def count_divisor(es):
-        return reduce(lambda x, y: x * y, [x + 1 for x in es])
-
-    def val(es, primes):
-        return reduce(lambda x, y: x * y, [p**e for p, e in zip(primes, es)])
-
-    e2 = [2, 2, 2, 2, 2, 2, 2]
+    n = 2
+    while count_divisor(n**2, primes) < 2000:
+        n += 1
+    return n
 
 
 if __name__ == "__main__":
