@@ -26,3 +26,7 @@ def main():
     primes = gen_prime()
 
     return [next(primes) for _ in range(cnt)][-1]
+
+
+if __name__ == "__main__":
+    print(main())
