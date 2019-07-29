@@ -26,7 +26,6 @@
 def count_divisor(n, primes):
     from functools import reduce
 
-    cnt = 0
     es = [0] * len(primes)
 
     # n をすべての素数で割り尽くし, 残りが 1 でなければそれ以外の素数を含む.
