@@ -15,3 +15,27 @@ def B(n):
         return 1
     else:
         return B(n - 1) * n**n // reduce(lambda x, y: x * y, range(1, n + 1))
+
+
+def exp2val(es):
+    return reduce(lambda x, y: x * y, [p**e for p, e in es.items()])
+
+
+def dict_add(d1, d2):
+    for k, v in d2.items():
+        if k in d1:
+            d1[k] += v
+        else:
+            d1[k] = v
+    return d1
+
+
+def dict_sub(d1, d2):
+    for k, v in d2.items():
+        if k in d1:
+            d1[k] -= v
+            if d1[k] == 0:
+                del d1[k]
+        else:
+            d1[k] = -v
+    return d1
