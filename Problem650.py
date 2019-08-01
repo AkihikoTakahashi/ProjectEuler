@@ -12,15 +12,18 @@
 #
 # n = Πp[i]^e[i] と書き, factor(n) := [e[0], e[1], ..., e[k]
 # と定義し,
-# factor(n) + factor(m) はリストのそれぞれの要素の和
-# factor(n) - factor(m) はリストのそれぞれの要素の差
-# factor(n)^a = [a*e[0], a*e[1], ..., a*e[k]] で定める.
+# factor(n) + factor(m) は辞書の追加または和
+# factor(n) - factor(m) は辞書の削除または差
+# factor(n)^a = [p[0]:a*e[0], p[1]:a*e[1], ..., p[k]:a*e[k]] で定める.
 #
 # n * m = factor(n) + factor(m), n / m = facotr(n) - factor(m) である.
 # factor(B(n)) = factor(B(n-1)) + factor(n)^n - factor(n!)
 # n! の p の指数は n//p + n//p^2 + n//p^3 + n//p^4 + ... である.
 
-from functools import reduce
+#
+# B(n) = Πk^(2k-n-1)
+#
+from functools import reduce, lru_cache
 
 
 def memo(f):
@@ -43,21 +46,22 @@ def eratosthenes(n):
         if primes[i]:
             for j in range(2 * i, n + 1, i):
                 primes[j] = False
-    return primes
+
+    return [i for i, p in enumerate(primes) if p]
 
 
-@memo
+@lru_cache()
 def B(n):
 
     if n == 1:
-        return [0] * len(primes)
+        return {}
     else:
-        nn = [n * i for i in val2list(n)]
+        nn = {p: n * e for p, e in val2dict(n).items()}
         fact_n = factorial(n)
         return es_sub(es_add(B(n - 1), nn), fact_n)
 
 
-@memo
+@lru_cache()
 def inverse(n, m=10**9 + 7):
     return pow(n, m - 2, m)
 
@@ -68,65 +72,67 @@ def D(n):
     else:
         es = B(n)
         sum_d = 1
-        for p, e in zip(primes, es):
-            sum_d = sum_d * (pow(p, e + 1) - 1) // (p - 1) % m
+        for p, e in es.items():
+            sum_d = sum_d * (pow(p, e + 1) - 1) * inverse(p - 1) % m
         return sum_d
 
 
-@memo
+@lru_cache()
 def factorial(n):
     if n == 1 or n == 0:
-        return [0] * len(primes)
+        return {}
     else:
-        return es_add(factorial(n - 1), val2list(n))
-
-    # es = [0] * len(primes)
-    # for i, p in enumerate(primes):
-    #     e = 0
-    #     tmp_p = p
-    #     if n < p:
-    #         break
-    #     while n >= p:
-    #         e += n // p
-    #         p *= tmp_p
-    #     es[i] = e
-    # return es
+        return es_add(factorial(n - 1), val2dict(n))
 
 
-def val2list(n):
-    es = [0] * len(primes)
-    for i, p in enumerate(primes):
+def val2dict(n):
+    es = dict()
+    for p in primes:
         cnt_p = 0
         while n % p == 0:
             cnt_p += 1
             n //= p
-        es[i] = cnt_p
+        es[p] = cnt_p
         if n == 1:
             break
     return es
 
 
-def list2val(es, m=1000000007):
+def dict2val(es, m=1000000007):
     return reduce(lambda x, y: x * y % m,
-                  [pow(p, e, m) for p, e in zip(primes, es)])
+                  [pow(p, e, m) for p, e in es.items()])
 
 
 def es_add(e1, e2):
-    return [a + b for a, b in zip(e1, e2)]
+    es = e1.copy()
+    for p, e in e2.items():
+        if p in es:
+            es[p] += e
+        else:
+            es[p] = e
+    return es
 
 
 def es_sub(e1, e2):
-    return [a - b for a, b in zip(e1, e2)]
+    es = e1.copy()
+    for p, e in e2.items():
+
+        es[p] -= e
+    return es
 
 
 N = 20000
 m = 10**9 + 7
-primes_bool = eratosthenes(N)
-primes = [i for i, p in enumerate(primes_bool) if p]
+primes = eratosthenes(N)
 
 
 def main():
-    return sum(D(i) for i in range(1, N + 1)) % m
+    s = 0
+    for i in range(1, N):
+        s = (s + D(i)) % m
+        print("calc", i)
+
+    return s
 
 
 if __name__ == "__main__":
