@@ -5,25 +5,27 @@
 #      = n!^(n+1) / (0!*1!*2!* ... * n!)^2
 #      = {(n-1)!^n / (0!*1!*2!* ... * (n-1)!)^2} * (n-1)! * n^(n+1) / n!^2
 #      = B(n-1) * n^n / n!
+# B(n) は n 以下の素因数の積と商で書けるので, 最大の素数は n 以下である.
 #
+# 次に D(n) について考える.
 # σ(n) = n の約数の和とする
 # σ(p^e) = (p^(e+1) - 1) / (p - 1)
+# 以上より,
 # D(n) = σ(B(n)) = σ(B(n-1)) * σ(n^n / n!)
+# と書ける.
+#
+# よって B(n) がどのように素因数分解されるかを調べればよい.
 #
 # n = Πp[i]^e[i] と書き, factor(n) := [e[0], e[1], ..., e[k]
 # と定義し,
-# factor(n) + factor(m) は辞書の追加または和
-# factor(n) - factor(m) は辞書の削除または差
+# factor(n) + factor(m) は辞書のキーの追加またはキーの和
+# factor(n) - factor(m) は辞書のキーの差
 # factor(n)^a = [p[0]:a*e[0], p[1]:a*e[1], ..., p[k]:a*e[k]] で定める.
 #
 # n * m = factor(n) + factor(m), n / m = facotr(n) - factor(m) である.
 # factor(B(n)) = factor(B(n-1)) + factor(n)^n - factor(n!)
-# n! の p の指数は n//p + n//p^2 + n//p^3 + n//p^4 + ... である.
 
-#
-# B(n) = Πk^(2k-n-1)
-#
-from functools import reduce, lru_cache
+from functools import reduce
 
 
 def memo(f):
@@ -38,7 +40,6 @@ def memo(f):
 
 
 def eratosthenes(n):
-
     primes = [False if i % 2 == 0 else True for i in range(n + 1)]
     primes[1], primes[2] = False, True
 
@@ -50,9 +51,8 @@ def eratosthenes(n):
     return [i for i, p in enumerate(primes) if p]
 
 
-@lru_cache()
+@memo
 def B(n):
-
     if n == 1:
         return {}
     else:
@@ -61,7 +61,7 @@ def B(n):
         return es_sub(es_add(B(n - 1), nn), fact_n)
 
 
-@lru_cache()
+@memo
 def inverse(n, m=10**9 + 7):
     return pow(n, m - 2, m)
 
@@ -73,11 +73,11 @@ def D(n):
         es = B(n)
         sum_d = 1
         for p, e in es.items():
-            sum_d = sum_d * (pow(p, e + 1) - 1) * inverse(p - 1) % m
+            sum_d = sum_d * (pow(p, e + 1, m) - 1) * inverse(p - 1) % m
         return sum_d
 
 
-@lru_cache()
+@memo
 def factorial(n):
     if n == 1 or n == 0:
         return {}
@@ -98,11 +98,6 @@ def val2dict(n):
     return es
 
 
-def dict2val(es, m=1000000007):
-    return reduce(lambda x, y: x * y % m,
-                  [pow(p, e, m) for p, e in es.items()])
-
-
 def es_add(e1, e2):
     es = e1.copy()
     for p, e in e2.items():
@@ -116,7 +111,6 @@ def es_add(e1, e2):
 def es_sub(e1, e2):
     es = e1.copy()
     for p, e in e2.items():
-
         es[p] -= e
     return es
 
@@ -128,10 +122,8 @@ primes = eratosthenes(N)
 
 def main():
     s = 0
-    for i in range(1, N):
+    for i in range(1, N + 1):
         s = (s + D(i)) % m
-        print("calc", i)
-
     return s
 
 
