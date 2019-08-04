@@ -6,7 +6,7 @@
 
 
 def is_pentagonal(n):
-    return (1 + int(1 + 24 * n)**0.5) % 6 == 0
+    return (1 + (1 + 24 * n)**0.5) % 6 == 0
 
 
 def main():
