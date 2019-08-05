@@ -25,8 +25,6 @@
 # n * m = factor(n) + factor(m), n / m = facotr(n) - factor(m) である.
 # factor(B(n)) = factor(B(n-1)) + factor(n)^n - factor(n!)
 
-from functools import reduce
-
 
 def memo(f):
     check = {}
