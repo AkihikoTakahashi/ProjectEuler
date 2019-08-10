@@ -25,5 +25,31 @@
 # m! % n = 0 ==> (m+1)! % n = 0 である.
 #
 
-lim = 10**8
-smallest = [0] * (lim + 1)
+from itertools import count
+
+
+def main():
+    lim = 10**8
+    # lim = 10**2
+    smallest = [0] * (lim + 1)
+
+    for i in range(2, len(smallest)):
+        if smallest[i] == 0:
+            # smallest[i] は素数
+
+            power = 1
+
+            for j in count(i, i):
+                power *= i
+
+                if power > lim:
+                    break
+
+                for k in range(power, len(smallest), power):
+                    smallest[k] = max(j, smallest[i])
+
+                    tmp = j // i
+                    while tmp % i == 0:
+                        power *= i
+                        tmp //= i
+    return sum(smallest)
