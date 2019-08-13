@@ -19,6 +19,13 @@
 #
 # n (n>=2) に対して 2 <= s(n) <= n である.
 # 特に n が素数のときのみ, s(n) = n である.
+#
+# n = p^e について考える.
+# s(n) = m のとき, m は p の倍数である.
+# なぜなら m = a * p + r となる自然数 a と r (a >= 1, 0 < r < p) が存在すれば,
+# m! と (m-1)! の p の指数は同じである. これは m! が n で割り切れるなら,
+# (m-1)! も n で割り切れ, s(n) の最小性に反する.
+
 # n = p * q (p < q) のとき s(n) >= q,
 # s(p^e * q^f) = max(s(p^e), s(q^f)) がいえる.
 #
@@ -29,10 +36,9 @@ from itertools import count
 
 
 def main():
-    lim = 10**8
-    # lim = 10**2
+    # lim = 10**8
+    lim = 100
     smallest = [0] * (lim + 1)
-
     for i in range(2, len(smallest)):
         if smallest[i] == 0:
             # smallest[i] は素数
@@ -46,10 +52,16 @@ def main():
                     break
 
                 for k in range(power, len(smallest), power):
-                    smallest[k] = max(j, smallest[i])
+                    smallest[k] = max(j, smallest[k])
 
-                    tmp = j // i
-                    while tmp % i == 0:
-                        power *= i
-                        tmp //= i
+                tmp = j // i
+                while tmp % i == 0:
+                    power *= i
+                    tmp //= i
+    print(smallest)
+
     return sum(smallest)
+
+
+if __name__ == "__main__":
+    print(main())
