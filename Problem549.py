@@ -26,18 +26,27 @@
 # m! と (m-1)! の p の指数は同じである. これは m! が n で割り切れるなら,
 # (m-1)! も n で割り切れ, s(n) の最小性に反する.
 
-# n = p * q (p < q) のとき s(n) >= q,
+# n = p * q (p < q, p, q は素数) のとき s(n) >= q,
 # s(p^e * q^f) = max(s(p^e), s(q^f)) がいえる.
 #
-# m! % n = 0 ==> (m+1)! % n = 0 である.
-#
+# p = 2 とする.
+# j = 1 * p のとき, j! = 2 * 1 より素因数 2 を 1 つ持つ.
+#                   すべての 2^1 の倍数に対して素因数 2 を 1 つ以上持つ.
+# j = 2 * p のとき, j! = 4! より素因数 2 を 3 つ持つ.
+#                   すべての 2^2 の倍数に対して素因数 2 を 3 つ以上持つ.
+# j = 3 * p のとき, j! = 6! より素因数 2 を 4 つ持つ.
+#                   すべての 2^4 の倍数に対して素因数 2 を 4 つ以上持つ.
+# j = 4 * p のとき, j! = 8! より素因数 2 を 7 つ持つ
+#                   すべての 2^8 の倍数に対して素因数 2 を 7 つ以上持つ.
+# これを j が上限を超えるまで繰り返すと n = k*p に対して s(n) が求まる.
+# つぎに p = 3 として, 同様の手順を繰り返す.
 
 from itertools import count
 
 
 def main():
     # lim = 10**8
-    lim = 100
+    lim = 300
     smallest = [0] * (lim + 1)
     for i in range(2, len(smallest)):
         if smallest[i] == 0:
@@ -58,6 +67,8 @@ def main():
                 while tmp % i == 0:
                     power *= i
                     tmp //= i
+                print(smallest)
+                print(power)
     print(smallest)
 
     return sum(smallest)
