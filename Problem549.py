@@ -45,13 +45,12 @@ from itertools import count
 
 
 def main():
-    # lim = 10**8
-    lim = 300
+    lim = 10**8
     smallest = [0] * (lim + 1)
     for i in range(2, len(smallest)):
         if smallest[i] == 0:
-            # smallest[i] は素数
 
+            # smallest[i] は素数
             power = 1
 
             for j in count(i, i):
@@ -67,9 +66,6 @@ def main():
                 while tmp % i == 0:
                     power *= i
                     tmp //= i
-                print(smallest)
-                print(power)
-    print(smallest)
 
     return sum(smallest)
 
