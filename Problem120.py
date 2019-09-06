@@ -9,7 +9,6 @@
 #          2 * n * a mod a^2 (n: 奇数)
 # n = 1 のとき 2 * a mod a^2 > 2 より
 # r_max = max(2 * n * a mod a^2)
-#   ※ a = 2 のとき, 2 * a mod a^2 = 0 であるが r_max = 0 である
 #
 # 考える n は n = a のとき 2 * n * a = 0 mod a^2 なので,
 # 0 <= n <= a - 1
