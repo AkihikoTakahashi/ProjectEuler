@@ -10,21 +10,29 @@
 # よって X0...0W + YZ0...0 % 10000019 = 0
 
 
-def gen_palindromic(digit, l=0):
-    '''digit桁の回文数を生成する'''
+def memo(f):
+    check = {}
 
-    if digit == l:
-        yield 0
-    elif digit - 1 == l:
-        for i in range(10):
-            yield i
+    def func(*args):
+        if args not in check:
+            check[args] = f(*args)
+        return check[args]
+
+    return func
+
+
+@memo
+def inner_palindromic(digit):
+    if digit == 0:
+        return [0]
+    elif digit == 1:
+        return [i for i in range(10)]
     else:
-        # start_i = 1 if l == 0 else 0
-        start_i = 0
-        multi = 10**(digit - l - 1) + 1
-        for i in range(start_i, 10):
-            for palindromic in gen_palindromic(digit, l + 2):
-                yield i * multi + 10 * palindromic
+        multi = 10**(digit - 1) + 1
+        return [
+            i * multi + 10 * pal for i in range(10)
+            for pal in inner_palindromic(digit - 2)
+        ]
 
 
 def rev(n):
@@ -42,7 +50,7 @@ def count_ans(digits, N):
     d = ceil(digits / 4)
 
     pal_d = digits - 2 * d
-    inners = Counter(i * pow(10, d, N) % N for i in gen_palindromic(pal_d))
+    inners = Counter(i * pow(10, d, N) % N for i in inner_palindromic(pal_d))
     outers = Counter((i * pow(10, pal_d + d, N) + rev(i)) % N
                      for i in range(10**(d - 1), 10**d))
 
