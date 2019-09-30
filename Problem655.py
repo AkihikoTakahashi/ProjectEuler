@@ -1,5 +1,14 @@
 # coding: utf-8
 
+# D 桁の数を XYZW に分割し, 10000019 の倍数とする
+# X, W はそれぞれ D/4 桁 (小数点切り上げ)で, rev(X) = W
+# YZ は回文数で, (D - (X, Z の桁数の和))桁である.
+
+# D 桁の数の外側だけを抜き出した数 X0...0W と, 内側だけを抜き出した数
+# YZ0...0 について考える.
+# 元の数は外側の数 + 内側の数であり, 10000019 で割ると 0 になる.
+# よって X0...0W + YZ0...0 % 10000019 = 0
+
 
 def gen_palindromic(digit, l=0):
     '''digit桁の回文数を生成する'''
@@ -26,11 +35,7 @@ def rev(n):
     return rev_n
 
 
-# 4 の倍数 + 1 ... 123454321 (9) -> 123*10^6 + 454*10^3 + 321
-# 4 の倍数 + 2 ... 1234554321 (10) -> 123*10^7 + 4554*10^3 + 321
-# 4 の倍数 + 3 ... 12345654321 (11) -> 123*10^8 + 45654*10^3 + 321
-# 4 の倍数 ....... 123456654321 (12) -> 123*10^9 + 456654*10^3 + 321
-def count_ans(digits, N=10000019):
+def count_ans(digits, N):
     from math import ceil
     from collections import Counter
 
@@ -41,25 +46,15 @@ def count_ans(digits, N=10000019):
     outers = Counter((i * pow(10, pal_d + d, N) + rev(i)) % N
                      for i in range(10**(d - 1), 10**d))
 
-    return sum(outers[N - k] * v for k, v in inners.items())
+    return sum(outers[(N - k) % N] * v for k, v in inners.items())
 
 
 def main():
     N = 10000019
     L = 32
 
-    cnt = 0
-    for i in range(8, L + 1):
-        _cnt = count_ans(i, N)
-        cnt += _cnt
-        print(i, _cnt)
-    # return sum(count_ans(i, N) for i in range(8, L + 1))
-    return cnt
+    return sum(count_ans(i, N) for i in range(3, L + 1))
 
 
 if __name__ == '__main__':
-    # N = 10000019
-    # a = set(i * pow(10, 8, N) % N for i in gen_palindromic(16))
-    # print(len(a))
-
     print(main())
