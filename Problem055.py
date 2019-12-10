@@ -26,7 +26,7 @@ def is_lychrel(n, cnt=0):
 
 
 def main():
-    return sum(1 for i in range(1, 10000) if is_lychrel(i))
+    return sum(is_lychrel(i) for i in range(1, 10000))
 
 
 if __name__ == "__main__":
