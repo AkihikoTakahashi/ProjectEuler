@@ -15,7 +15,7 @@ def main():
     max_d = 1000
 
     loops = [cnt_loop(1, d) for d in range(1, max_d)]
-    return loops.index(max(loops))
+    return loops.index(max(loops)) + 1
 
 
 if __name__ == "__main__":
