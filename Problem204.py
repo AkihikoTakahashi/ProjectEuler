@@ -1,5 +1,11 @@
 # coding: utf-8
 
+# ハミング数の集合を H, type=100 とし, type 以下の素数を p_1, p_2, ...,  とする.
+# ハミング数の初期値を H = {1} であり, p_1 ^ n <= N を H に追加する.
+# h を H の要素とし, h * p_2 ^ n <= N となる h * p_2 ^ n を H に追加する.
+# これをすべての p_i で繰り返すと, すべての
+# p_1 ^ e_1 * p_2 ^ e_2 * ... * p_k ^ e_k <= N が得られる.
+
 
 def eratosthenes(n):
     primes = [False if i % 2 == 0 else True for i in range(n + 1)]
@@ -14,20 +20,21 @@ def eratosthenes(n):
 
 
 def main():
+    h_type = 100
+    primes = eratosthenes(h_type)
     N = 10**9
-    t = 100
 
-    hammings = [True] * (N + 1)
+    hammings = [1]
 
-    primes = eratosthenes(N)
     for p in primes:
-        if p <= t:
-            continue
-
-        for i in range(p, N + 1, p):
-            hammings[i] = False
-
-    return sum(1 for i in hammings[1:] if i)
+        factors = []
+        for h in hammings:
+            x = p * h
+            while x <= N:
+                factors.append(x)
+                x *= p
+        hammings += factors
+    return len(hammings)
 
 
 if __name__ == "__main__":
