@@ -18,9 +18,8 @@ def main():
     min_x = int(1020304050607080900**0.5)
     max_x = int(1929394959697989990**0.5)
 
-    for x in range(min_x // 10 * 10, max_x, 10):
-        if check(x**2 // 100):
-            return x
+    return next(x for x in range(min_x // 10 * 10, max_x, 10)
+                if check(x**2 // 100))
 
 
 if __name__ == "__main__":
