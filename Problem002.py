@@ -1,5 +1,7 @@
 # coding: utf-8
 
+from itertools import takewhile
+
 
 def gen_fibo():
     a, b = 0, 1
@@ -9,17 +11,10 @@ def gen_fibo():
 
 
 def main():
-    s = 0
-    fibo = gen_fibo()
     lim = 4000000
 
-    for f in fibo:
-        if f > lim:
-            break
-
-        if f % 2 == 0:
-            s += f
-    return s
+    return sum(
+        filter(lambda x: x % 2 == 0, takewhile(lambda x: x < lim, gen_fibo())))
 
 
 if __name__ == "__main__":
