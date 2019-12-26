@@ -1,31 +1,37 @@
 # coding: utf-8
 
+from itertools import count, takewhile, islice
 
-def gen_prime():
-    def is_prime(n):
-        if n <= 1:
-            return False
-        elif n <= 3:
-            return True
-        elif n % 2 == 0:
-            return False
-        else:
-            return all([n % i != 0 for i in range(3, int(n**0.5) + 1, 2)])
 
-    i = 3
-    yield 2
+def ex_sieve(L=1000):
+    a = [True] * L
+    for p in (i for i in range(2, L) if a[i]):
+        for k in range(2 * p, L, p):
+            a[k] = False
 
-    while True:
-        if is_prime(i):
-            yield i
-        i += 2
+    primes = [p for p in range(2, L) if a[p]]
+
+    for p in primes:
+        yield p
+
+    for m in count(1):
+        start = m * L
+        end = start + L
+
+        a = [True] * L
+        for p in takewhile(lambda p: p * p < end, primes):
+            k0 = (start + p - 1) // p * p - start
+            for k in range(k0, L, p):
+                a[k] = False
+
+        for p in (start + k for k in range(L) if a[k]):
+            primes.append(p)
+            yield p
 
 
 def main():
     cnt = 10001
-    primes = gen_prime()
-
-    return [next(primes) for _ in range(cnt)][-1]
+    return next(islice(ex_sieve(), cnt - 1, None))
 
 
 if __name__ == "__main__":
