@@ -31,9 +31,8 @@ def is_prime(n):
 
 def main():
     max_n = 7654321
-    for n in range(max_n, 2, -1):
-        if is_pandigit(n) and is_prime(n):
-            return n
+    return next(n for n in range(max_n, 2, -1)
+                if is_pandigit(n) and is_prime(n))
 
 
 if __name__ == '__main__':
