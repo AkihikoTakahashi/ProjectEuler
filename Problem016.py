@@ -1,11 +1,12 @@
 # coding: utf-8
 
 
-def sum_digit(n, s=0):
-    if 0 <= n <= 9:
-        return n + s
-    else:
-        return sum_digit(n // 10, s + n % 10)
+def sum_digit(n):
+    s = 0
+    while n > 0:
+        s += n % 10
+        n //= 10
+    return s
 
 
 def main():
