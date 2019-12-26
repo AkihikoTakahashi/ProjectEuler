@@ -1,7 +1,7 @@
 # coding: utf-8
 
+from itertools import count, dropwhile
 from math import log10
-from itertools import count
 
 
 def gen_fibo():
@@ -14,12 +14,8 @@ def gen_fibo():
 
 
 def main():
-    fibo = gen_fibo()
-    digit_lim = 1000
-    for i in count(1):
-        n = next(fibo)
-        if log10(n) - 1 > digit_lim:
-            return i
+    L = 1000
+    next(dropwhile(lambda x: log10(x[0]) < L, zip(gen_fibo(), count(1))))[1]
 
 
 if __name__ == "__main__":
