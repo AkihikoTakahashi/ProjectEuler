@@ -1,15 +1,22 @@
 # coding: utf-8
 
 # e^(k/n) - 1 >= π となる最小の k は int(n * log(π+1))+1
-
+# f_list = [e^(1/n) - 1, e^(2/n) - 1, e^(3/n) - 1, ...] とし,
+# f2 = [e^(i/n) - 1 + e^(j/n) - 1 (i, j = 1, 2, ..., k)] とする.
+# f2 の各値 a に対して, f2 の中から π - a に最も近い値を b 探し,
+# |a + b - π| が最小となる a と b の組み合わせを探す.
+#
+# f2 の中から b を探すときは 2分探索 を行う.
+#
 import math
 
 
 def binary_search_closest(numbers, target):
     '''2分探索をする.
-値が存在しない場合, 近似値を返す
+値が存在しない場合, 近似値を返す.
 
-今回のnumbersのフォーマットは (num, a, b)であり, targetに一致する num を探す'''
+今回のnumbersのフォーマットは (num, a, b)であり, 
+target ≒ num なる (num, a, b) を探す'''
 
     if len(numbers) == 0:
         return None
@@ -57,26 +64,25 @@ def f_n(n):
 
 def main():
     n = 10000
-    # n = 200
     PI = math.pi
 
     f = f_n(n)
     max_k = int(n * math.log(PI + 1)) + 1
     f_lists = [f(i) for i in range(max_k)]
 
-    f_plus_g = []
+    f2 = []
     for a in range(1, max_k):
         for b in range(a + 1, max_k):
             if f_lists[a] + f_lists[b] > PI:
                 break
-            f_plus_g.append((f_lists[a] + f_lists[b], a, b))
-    sorted_f_plus_g = sorted(f_plus_g, key=lambda x: x[0])
+            f2.append((f_lists[a] + f_lists[b], a, b))
+    sorted_f2 = sorted(f2, key=lambda x: x[0])
 
     error_min = 10
-    for k1, a, b in sorted_f_plus_g:
+    for k1, a, b in sorted_f2:
         if k1 > PI / 2:
             break
-        k2, c, d = binary_search_closest(sorted_f_plus_g, PI - k1)
+        k2, c, d = binary_search_closest(sorted_f2, PI - k1)
         error = abs(k1 + k2 - PI)
         if error < error_min:
             a_min, b_min, c_min, d_min = a, b, c, d
