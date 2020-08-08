@@ -18,6 +18,7 @@ def find_n(sorted_list, n):
 
 def gen_palindromic(digit=0):
     '''digit桁の回文数を生成する'''
+
     from itertools import count
 
     def _gen_palindromic(digit, length=0):
@@ -40,14 +41,17 @@ def gen_palindromic(digit=0):
 
 
 def main():
-    cnt_max = 5
+    WAYS = 4
+    COUNT = 5
     squares = []
     cubes = []
     s_max = 1
     c_max = 1
+    cnt = 0
+    pal_sum = 0
 
     for pal in gen_palindromic():
-        cnt = 0
+        way = 0
 
         # pal 以下の平方数のリストを生成
         while s_max**2 < pal:
@@ -61,9 +65,14 @@ def main():
 
         for c in cubes:
             if find_n(squares, pal - c):
-                cnt += 1
-            if cnt == cnt_max:
-                return pal
+                way += 1
+
+        if way == WAYS:
+            cnt += 1
+            pal_sum += pal
+
+        if cnt == COUNT:
+            return pal_sum
 
 
 if __name__ == '__main__':
