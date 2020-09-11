@@ -11,8 +11,13 @@
 # F(x mod p) = (x mod n^e, x mod m^f)
 # と F を定義すると
 # a = max(F^-1(i, j) i,j=0,1 である.
+#
+# また a^2 = a mod p なら b = -a + 1 も b^2 = b mod p
+# を満す.
 
 from itertools import product, islice
+
+log = {}
 
 
 def exgcd(a, b):
@@ -35,7 +40,10 @@ def _crt(eq0, eq1):
     a0, m0 = eq0
     a1, m1 = eq1
 
-    d, u, v = exgcd(m0, m1)
+    if (m0, m1) not in log:
+        log[(m0, m1)] = exgcd(m0, m1)
+
+    d, u, v = log[(m0, m1)]
     if (a0 - a1) % d != 0:
         raise Exception("x doesn't exists")
 
@@ -65,7 +73,6 @@ def factorization(n):
         f_i = []
         while i > 1:
             f = 1
-            # 360 = 8 * 9 * 5 の形式で格納
             while True:
                 tmp = min_factors[i]
                 f *= tmp
