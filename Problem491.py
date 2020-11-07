@@ -2,7 +2,10 @@
 
 # 20桁の数 N が 11 の倍数となるには
 # 偶数桁の和 - 奇数桁の和が 11 の倍数となればよい.
-#
+# 偶数桁の集合を even, 奇数桁の集合を odd として,
+# even の並べ方と odd の並べ方をそれぞれ求め, 掛けると
+# 偶数桁に even, 奇数桁に odd を使った数の総数が求まる.
+
 from itertools import combinations
 from collections import Counter
 from math import factorial
@@ -18,7 +21,6 @@ def list_difference(list1, list2):
 
 
 def main():
-
     logs = []
     N = 10
     n_list = sorted([i for i in range(N)] * 2)
