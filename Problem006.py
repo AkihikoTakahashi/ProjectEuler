@@ -2,10 +2,12 @@
 
 
 def main():
-    max_i = 100
+    n = 100
 
-    return sum([i for i in range(1, max_i + 1)])**2 - sum(
-        [i**2 for i in range(1, max_i + 1)])
+    pow_of_sum = (n * (n + 1) // 2)**2
+    sum_of_pow = n * (n + 1) * (2 * n + 1) // 6
+
+    return pow_of_sum - sum_of_pow
 
 
 if __name__ == "__main__":
