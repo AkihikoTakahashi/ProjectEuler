@@ -32,3 +32,7 @@ def main():
         sum_numerator += numerator % 10
         numerator //= 10
     return sum_numerator
+
+
+if __name__ == '__main__':
+    print(main())

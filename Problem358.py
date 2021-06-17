@@ -15,7 +15,7 @@
 # 1/p + (p-1)/p = 0.9999... のように 9 が p-1 個続くことから,
 # 巡回数の各桁の和は 9(p - 1)/2 で求まる.
 
-from itertools import takewhile, dropwhile, count, islice
+from itertools import takewhile, count, islice
 
 
 def nth(n, iterable, default=None):

@@ -4,7 +4,6 @@
 # https://ja.wikipedia.org/wiki/%E3%83%97%E3%83%AA%E3%83%A0%E6%B3%95
 
 from queue import PriorityQueue
-import math
 
 
 def download(url):
@@ -61,3 +60,7 @@ def main():
 
     min_weight = get_minimal_network(edges)
     return total_weight - min_weight
+
+
+if __name__ == '__main__':
+    print(main())

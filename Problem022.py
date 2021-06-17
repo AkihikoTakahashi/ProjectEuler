@@ -24,3 +24,7 @@ def main():
 
     names.sort()
     return sum([point(i + 1, name) for i, name in enumerate(names)])
+
+
+if __name__ == '__main__':
+    print(main())

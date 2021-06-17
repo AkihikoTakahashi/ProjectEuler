@@ -19,3 +19,7 @@ def cfrac(d):
 def main():
     n = 10000
     return sum(cfrac(i) for i in range(2, n + 1) if int(i**0.5)**2 != i)
+
+
+if __name__ == '__main__':
+    print(main())

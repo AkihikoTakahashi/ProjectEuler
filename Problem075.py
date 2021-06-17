@@ -32,3 +32,7 @@ def main():
         wire_len[a + b + c] += 1
 
     return sum(map(lambda x: x == 1, wire_len))
+
+
+if __name__ == '__main__':
+    print(main())

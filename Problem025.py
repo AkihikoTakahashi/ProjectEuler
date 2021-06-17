@@ -15,7 +15,8 @@ def gen_fibo():
 
 def main():
     L = 1000
-    next(dropwhile(lambda x: log10(x[0]) < L, zip(gen_fibo(), count(1))))[1]
+    return next(dropwhile(lambda x: log10(x[0]) < L, zip(gen_fibo(),
+                                                         count(1))))[1]
 
 
 if __name__ == "__main__":
