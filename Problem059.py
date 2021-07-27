@@ -34,3 +34,7 @@ def main():
         # the, The を含んでいれば正しいとみなす
         if ' the ' in plain or ' The ' in plain:
             return s
+
+
+if __name__ == '__main__':
+    print(main())
