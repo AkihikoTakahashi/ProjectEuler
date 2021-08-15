@@ -20,10 +20,9 @@
 # u + v = 0 mod 4 より v = 4 - (u % 4) + 4k
 # u / 3 < v より u / 3 < 4 - (u % 4) + 4k
 # k > u / 12 - 1 + (u % 4) / 4
-# k は整数なので最小となる k は k = int(u / 12 - 1 + (u % 4) / 4) + 1
-# ゆえに, u に対して最小の v の値 v0 は
-# v0 = 4 - (u % 4) + 4k
-# となる.
+# から k = int(u / 12 - 1 + (u % 4) / 4)
+# として, v0 = 4 - (u % 4) + 4 * k
+# を v の初期値とすると無駄なループが削減される.
 
 from itertools import takewhile
 
@@ -33,14 +32,14 @@ def main():
     ans = [0] * N
 
     for u in range(1, N):
-
         # u % 4 == 4 - v % 4 かつ, v > u/3 となる最小の v = v0
         # を求める.
-        k = int(u / 12 - 1 + (u % 4) / 4) + 1
+        k = int(u / 12 - 1 + (u % 4) / 4)
         v0 = 4 - (u % 4) + 4 * k
         for v in takewhile(lambda v: u * v < N, range(v0, N, 4)):
-            n = u * v
-            ans[n] += 1
+            if -u + 3 * v > 0:
+                n = u * v
+                ans[n] += 1
 
     return sum(1 for _ in filter(lambda i: i == 10, ans))
 
