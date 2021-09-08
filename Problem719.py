@@ -61,8 +61,8 @@ def is_sNumber(n):
 
 
 def main():
-    N = 10**10
-    return sum(n for n in filter(lambda x: x % 9 == 0 or x % 9 == 1,
+    N = 10**12
+    return sum(n for n in filter(lambda x: x % 9 <= 1,
                                  iter(i**2 for i in range(4,
                                                           int(N**0.5) + 1)))
                if is_sNumber(n))
