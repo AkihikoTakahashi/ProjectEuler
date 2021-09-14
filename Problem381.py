@@ -11,17 +11,12 @@
 
 
 def eratosthenes(n):
-
-    is_prime = [False if i % 2 == 0 else True for i in range(n + 1)]
-    is_prime[0], is_prime[1], is_prime[2] = False, False, True
-
+    ''' Returns  a list of primes < n '''
+    primes = [True] * n
     for i in range(3, int(n**0.5) + 1, 2):
-        if is_prime[i]:
-            for i in range(2 * i, n + 1, i):
-                is_prime[i] = False
-
-    primes = [i for i in range(n + 1) if is_prime[i]]
-    return primes
+        if primes[i]:
+            primes[i * i::2 * i] = [False] * ((n - i * i - 1) // (2 * i) + 1)
+    return [2] + [i for i in range(3, n, 2) if primes[i]]
 
 
 def S(p):
