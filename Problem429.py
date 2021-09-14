@@ -10,16 +10,12 @@ from math import log
 
 
 def eratosthenes(n):
-
-    primes = [False if i % 2 == 0 else True for i in range(n + 1)]
-    primes[1], primes[2] = False, True
-
+    ''' Returns  a list of primes < n '''
+    primes = [True] * n
     for i in range(3, int(n**0.5) + 1, 2):
         if primes[i]:
-            for j in range(i**2, n + 1, i):
-                primes[j] = False
-
-    return [i for i in range(n + 1) if primes[i]]
+            primes[i * i::2 * i] = [False] * ((n - i * i - 1) // (2 * i) + 1)
+    return [2] + [i for i in range(3, n, 2) if primes[i]]
 
 
 def main():
