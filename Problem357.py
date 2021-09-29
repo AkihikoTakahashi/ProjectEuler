@@ -7,14 +7,13 @@
 #       N は平方因子を持たない N = ab^2 => b + N/b = b + ab = b(1+b)
 
 
-def is_prime(n):
-    primes = [False if i % 2 == 0 else True for i in range(n + 1)]
-    primes[1], primes[2] = False, True
-
-    for i in range(int(n**0.5) + 1):
+def eratosthenes(n):
+    ''' Returns  a list of primes < n '''
+    primes = [False, False] + [True] * (n - 2)
+    primes[4::2] = [False] * ((n + 1) // 2 - 2)
+    for i in range(3, int(n**0.5) + 1, 2):
         if primes[i]:
-            for j in range(2 * i, n + 1, i):
-                primes[j] = False
+            primes[i * i::2 * i] = [False] * ((n - i * i - 1) // (2 * i) + 1)
     return primes
 
 
@@ -26,7 +25,7 @@ def gen_divisor(n):
 
 def main():
     lim = 100000000
-    is_primes = is_prime(lim + 1)
+    is_primes = eratosthenes(lim + 2)
     s = 0
 
     for n in range(1, lim + 1):
