@@ -3,25 +3,21 @@
 # Problem120.pyと同様に
 # (p[n] - 1)^n + (p[n] + 1)^n = 2 * p[n] * n mod p[n]^2 (n: 奇数)
 
+from itertools import count
 
-def gen_prime():
-    def is_prime(n):
-        if n <= 1:
-            return False
-        elif n <= 3:
-            return True
-        elif n % 2 == 0:
-            return False
-        else:
-            return all([n % i != 0 for i in range(3, int(n**0.5) + 1, 2)])
 
-    i = 3
+def gen_primes():
     yield 2
+    primes = [2]
 
-    while True:
-        if is_prime(i):
-            yield i
-        i += 2
+    for n in count(3, step=2):
+        for p in primes:
+            if n % p == 0:
+                break
+            if p * p > n:
+                yield n
+                primes.append(n)
+                break
 
 
 def calc(n, p):
@@ -29,10 +25,10 @@ def calc(n, p):
 
 
 def main():
-    primes = gen_prime()
     limit = 10**10
 
-    return next(n for n, p in enumerate(primes, start=1) if calc(n, p) > limit)
+    return next(n for n, p in enumerate(gen_primes(), start=1)
+                if calc(n, p) > limit)
 
 
 if __name__ == "__main__":
