@@ -7,6 +7,11 @@
 # 判別式 D = 4b(1 - (10^d)) + 10^2d が平方数なら
 # a = (10^d - 2b ± √D) / 2
 # が解となる.
+# また, D >= 0 より b は
+# 4b(1 - (10^d)) + 10^2d >= 0
+# を満す.
+# これを整理すると b <= 10^2d / 4(10^d - 1) <= 10^2d / 4 * 10^d = 10^d / 4
+# が言える.
 
 
 def is_square(n):
@@ -16,7 +21,7 @@ def is_square(n):
 def main():
     N = 16
     s = 0
-    for b in range(1, pow(10, N // 2)):
+    for b in range(1, pow(10, N // 2) // 4 + 1):
         d = len(str(b))
         det = 4 * b * (1 - pow(10, d)) + pow(10, 2 * d)
         if det < 0:
